@@ -1,40 +1,31 @@
-//Esercizio 1: Gestione Completa di un Carrello con Applicazione di Sconto e Verifica Stock
-
 // funzione che applica lo sconto ai prodotti
 function applicaSconto(prodotti, sconto, callback) {
-  const prodottiScontati = prodotti.map(({ nome, prezzo, ...rest }) => {
-    // con .map creaiamo un nuovo array, in cui ogni prodotto ha il suo prezzo scontato
-    const prezzoScontato = prezzo - (prezzo * sconto) / 100;
-    return {
-      nome,
-      prezzo: prezzoScontato.toFixed(2),
-      ...rest,
-    };
-  });
-
   setTimeout(() => {
+    const prodottiScontati = prodotti.map(({ prezzo, ...rest }) => {
+      // con .map creaiamo un nuovo array, in cui ogni prodotto ha il suo prezzo scontato
+      const prezzoScontato = prezzo - (prezzo * sconto) / 100;
+      return {
+        prezzo: prezzoScontato.toFixed(2),
+        ...rest,
+      };
+    });
+    // console.log(prodottiScontati);
     callback(prodottiScontati);
   }, 1000);
 }
 // funzione che verifica la disponibilità di stock dei prodotti
 function verificaStock(prodottiScontati, callback) {
   const prodottiDisponibili = [];
-  let prodottiVerificati = 0;
 
   prodottiScontati.forEach((prodotto) => {
-    setTimeout(() => {
-      const disponibile = Math.random() > 0.2;
-      if (disponibile) {
-        prodottiDisponibili.push(prodotto);
-      }
-
-      prodottiVerificati++;
-
-      if (prodottiVerificati === prodottiScontati.length) {
-        callback(prodottiDisponibili);
-      }
-    }, 1000 * prodottiVerificati);
+    const disponibile = Math.random() > 0.2;
+    if (prodotto.disponibilita) {
+      prodottiDisponibili.push(prodotto);
+    }
   });
+  setTimeout(() => {
+    callback(prodottiDisponibili);
+  }, 1000 * prodottiDisponibili.length);
 }
 // funzione per calcolare il totale del carrello
 function calcolaTotale(prodottiDisponibili, callback) {
